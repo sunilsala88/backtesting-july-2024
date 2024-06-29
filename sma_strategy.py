@@ -13,6 +13,7 @@ def SMA1(closing_data,l):
     sma2 = sma_indicator(data['Close'],l)
     return sma2
 
+
 class Sma_Strategy(Strategy):
 
     def init(self):
@@ -39,4 +40,5 @@ bt = Backtest(data, Sma_Strategy,
               exclusive_orders=True)
 
 output = bt.run()
-bt.plot()
+print(output)
+# bt.plot()
