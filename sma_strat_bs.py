@@ -21,11 +21,13 @@ def SMA2(closing_data,l):
 
 
 class Sma_Strategy(Strategy):
+    n1=20
+    n2=50
 
     def init(self):
         closing_price=self.data.Close.s
-        self.sma1=self.I(SMA1,closing_price,20)
-        self.sma2=self.I(SMA2,closing_price,50)
+        self.sma1=self.I(SMA1,closing_price,self.n1)
+        self.sma2=self.I(SMA2,closing_price,self.n2)
 
 
 
@@ -65,4 +67,13 @@ bt = Backtest(data, Sma_Strategy,
 
 output = bt.run()
 print(output)
+bt.plot()
+
+n1_list=range(10,30,1)
+n2_list=range(50,80,1)
+
+
+stats=bt.optimize(n1=n1_list,n2=n2_list,maximize='Return [%]')
+print(stats)
+print('GOOG',stats['_strategy'])
 bt.plot()
