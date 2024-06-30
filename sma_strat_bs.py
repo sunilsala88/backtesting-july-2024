@@ -21,8 +21,8 @@ def SMA2(closing_data,l):
 
 
 class Sma_Strategy(Strategy):
-    n1=20
-    n2=50
+    n1=28
+    n2=69
 
     def init(self):
         closing_price=self.data.Close.s
@@ -47,33 +47,36 @@ class Sma_Strategy(Strategy):
         
 
 
-import yfinance as yf
-data=yf.download('^NSEBANK',start='2020-06-24',end='2024-06-29',interval='1d')
+# import yfinance as yf
+# data=yf.download('^NSEBANK',start='2020-06-24',end='2024-06-29',interval='1d')
+# print(data)
+
+
+data=pd.read_csv('GOOG_5min.csv')
+print(data)
+data['Date']=pd.to_datetime(data['Date'])
+data.set_index('Date',inplace=True)
+print(data)
+data=data['2023-01-03 14:30:00':'2023-06-03 14:30:00']
 print(data)
 
 
-# data=pd.read_csv('GOOG_5min.csv')
-# print(data)
-# data['Date']=pd.to_datetime(data['Date'])
-# data.set_index('Date',inplace=True)
-# print(data)
-# data=data['2023-01-03 14:30:00':'2023-06-03 14:30:00']
-# print(data)
-
-
 bt = Backtest(data, Sma_Strategy,
-              cash=100000, commission=.002,
+              cash=1000, commission=.002,
               exclusive_orders=True)
 
 output = bt.run()
 print(output)
-bt.plot()
+output['_trades'].to_csv('trades.csv')
+# bt.plot()
 
-n1_list=range(10,30,1)
-n2_list=range(50,80,1)
+# n1_list=range(10,30,1)
+# n2_list=range(50,80,1)
 
 
-stats=bt.optimize(n1=n1_list,n2=n2_list,maximize='Return [%]')
-print(stats)
-print('GOOG',stats['_strategy'])
-bt.plot()
+# stats=bt.optimize(n1=n1_list,n2=n2_list,maximize='Win Rate [%]')
+# print(stats)
+# print('GOOG',stats['_strategy'])
+# bt.plot()
+
+#overfitting
