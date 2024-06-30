@@ -37,12 +37,48 @@ class Sma_Strategy(Strategy):
         
 
 
-import yfinance as yf
-data=yf.download('GOOG',start='2020-06-24',end='2024-06-29',interval='1d')
-print(data)
+# import yfinance as yf
+# data=yf.download('GOOG',start='2020-06-24',end='2024-06-29',interval='1d')
+# print(data)
 
-ind1=SMA1(data['Close'],10)
-print(ind1)
+from ib_insync import *
+# util.startLoop()  # uncomment this line when in a notebook
+import datetime as dt
+import pandas as pd
+ib = IB()
+ib.connect('127.0.0.1', 7497, clientId=66)
+
+def last_day_of_month(year, month):
+    next_month = month % 12 + 1
+    next_year = year + month // 12
+    last_day = dt.date(next_year, next_month, 1) - dt.timedelta(days=1)
+    return last_day
+
+
+name='GOOG'
+contract2=Stock(name,'SMART','USD')
+# year=5
+final_data=pd.DataFrame()
+for month in range(1,6):
+
+    end_time=last_day_of_month(2023, month)
+    print(end_time)
+    bars = ib.reqHistoricalData(
+        contract2, endDateTime=end_time, durationStr='1 M',
+        barSizeSetting='5 mins', whatToShow='TRADES', useRTH=True,formatDate=2)
+    df1 = util.df(bars)
+    print(df1)
+    final_data=pd.concat([final_data,df1],axis=0).drop_duplicates()
+    
+print(final_data)
+
+d1={'date':'Date','open':'Open','high':'High','low':'Low','close':'Close','volume':'Volume'}
+final_data.rename(columns =d1, inplace = True) 
+final_data.set_index('Date',inplace=True)
+final_data.to_csv(f'{name}_5min.csv')
+data=final_data
+
+
 
 
 
