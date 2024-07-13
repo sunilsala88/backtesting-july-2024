@@ -18,12 +18,23 @@ class supertrend(Strategy):
         self.super2=self.I(supertrend2,self.data.High.s,self.data.Low.s,self.data.Close.s)
 
     def next(self):
-        pass
+        if self.super1[-1]>0 and self.super1[-2]<0:
+            if self.position.is_short:
+                self.position.close()
+            else:
+                pass
+            self.buy()
+        elif self.super1[-1]<0 and self.super1[-2]>0:
+            if self.position.is_long:
+                self.position.close()
+            else:
+                pass
+            self.sell()
 
 
 
 import yfinance as yf
-data=yf.download('AMZN',start='2023-05-24',end='2024-06-29',interval='1D')
+data=yf.download('AMZN',start='2020-05-24',end='2024-06-29',interval='1D')
 print(data)
 
 
