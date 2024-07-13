@@ -37,16 +37,16 @@ class Sma_Strategy(Strategy):
         
 
 
-# import yfinance as yf
-# data=yf.download('GOOG',start='2020-06-24',end='2024-06-29',interval='1d')
+import yfinance as yf
+data=yf.download('GOOG',start='2020-06-24',end='2024-06-29',interval='1d')
+print(data)
+
+
+# data=pd.read_csv('GOOG_5min.csv')
 # print(data)
-
-
-data=pd.read_csv('GOOG_5min.csv')
-print(data)
-data['Date']=pd.to_datetime(data['Date'])
-data.set_index('Date',inplace=True)
-print(data)
+# data['Date']=pd.to_datetime(data['Date'])
+# data.set_index('Date',inplace=True)
+# print(data)
 
 # data=data['2023-01-03 14:30:00':'2023-06-03 14:30:00']
 # print(data)
@@ -56,4 +56,5 @@ bt = Backtest(data, Sma_Strategy,
 
 output = bt.run()
 print(output)
-# bt.plot()
+# print(output['_trades'])
+bt.plot()

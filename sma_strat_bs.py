@@ -61,6 +61,23 @@ data=data['2023-01-03 14:30:00':'2023-06-03 14:30:00']
 print(data)
 
 
+
+
+# Resample the data
+ohlcv_dict = {
+     'Open': 'first',
+     'High': 'max',
+     'Low': 'min',
+     'Close': 'last',
+     'Volume': 'sum'
+}
+
+
+data = data.resample('15T').agg(ohlcv_dict)
+data.dropna(inplace=True)
+
+
+
 bt = Backtest(data, Sma_Strategy,
               cash=1000, commission=.002,
               exclusive_orders=True)
@@ -68,9 +85,9 @@ bt = Backtest(data, Sma_Strategy,
 output = bt.run()
 print(output)
 output['_trades'].to_csv('trades.csv')
-# bt.plot()
+bt.plot()
 
-# n1_list=range(10,30,1)
+# n1_list=range(10,30,5)
 # n2_list=range(50,80,1)
 
 
