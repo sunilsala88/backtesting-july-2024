@@ -55,25 +55,23 @@ class supertrend(Strategy):
 
     def next(self):
 
-        # print(self.data.index[-1],self.data.Close[-1],self.super1[-1],self.super2[-1],self.ema_hour[-1],self.daily_ema[-1])
-
-
         if self.super1[-1]>0 and self.data.Close[-1]> self.daily_ema[-1]:
-            self.buy()
-
-            # if self.position.is_short:
-            #     self.position.close()
-            #     self.buy()
 
 
+            if self.position.is_short:
+                self.position.close()
+                self.buy()
 
-            # elif not self.position:  
-            #     self.buy()
+
+
+            elif not self.position:  
+                self.buy()
 
 
         elif self.super1[-1]<0 and self.data.Close[-1]<self.daily_ema[-1]:
-            self.position.close()
-            # self.sell()
+            if self.position.is_long:
+                self.position.close()
+                self.sell()
 
 
 data=pd.read_csv('TSLA_1hour.csv')
