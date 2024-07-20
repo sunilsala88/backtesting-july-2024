@@ -45,6 +45,7 @@ def ema(close_data,period=9):
 class supertrend(Strategy):
     
     n1=9
+
     def init(self):
         self.super1=self.I(supertrend1,self.data.High.s,self.data.Low.s,self.data.Close.s)
         self.super2=self.I(supertrend2,self.data.High.s,self.data.Low.s,self.data.Close.s)
@@ -78,10 +79,13 @@ data=pd.read_csv('TSLA_1hour.csv')
 data['Date']=pd.to_datetime(data['Date'])
 data['Date']=data['Date'].dt.tz_localize(None)
 data.set_index('Date',inplace=True)
+#remove duplicates
+data=data[~data.index.duplicated()]
+
 print(data)
 
 bt=Backtest(data,supertrend,cash=100000)
 output=bt.run()
 print(output)
-print(output['_trades'].to_csv('trades.csv'))
+# print(output['_trades'].to_csv('trades.csv'))
 bt.plot()

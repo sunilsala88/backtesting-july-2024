@@ -52,7 +52,7 @@ class Sma_Strategy(Strategy):
 # print(data)
 
 
-data=pd.read_csv('GOOG_5min.csv')
+data=pd.read_csv('GOOG_1min.csv')
 print(data)
 data['Date']=pd.to_datetime(data['Date'])
 data.set_index('Date',inplace=True)
@@ -87,13 +87,13 @@ print(output)
 output['_trades'].to_csv('trades.csv')
 bt.plot()
 
-# n1_list=range(10,30,5)
-# n2_list=range(50,80,1)
+n1_list=range(10,30,5)
+n2_list=range(50,80,1)
 
 
-# stats=bt.optimize(n1=n1_list,n2=n2_list,maximize='Win Rate [%]')
-# print(stats)
-# print('GOOG',stats['_strategy'])
-# bt.plot()
+stats=bt.optimize(n1=n1_list,n2=n2_list,maximize='Win Rate [%]')
+print(stats)
+print('GOOG',stats['_strategy'])
+bt.plot()
 
 #overfitting

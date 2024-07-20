@@ -37,22 +37,27 @@ def last_day_of_month(year, month):
 
 name='GOOG'
 contract2=Stock(name,'SMART','USD')
+contract2=ib.qualifyContracts(contract2)[0]
 # year=5
-final_data=pd.DataFrame()
-for month in range(1,13):
+print(contract2)
 
-    end_time=last_day_of_month(2023, month)
-    print(end_time)
-    bars = ib.reqHistoricalData(
-        contract2, endDateTime=end_time, durationStr='1 M',
-        barSizeSetting='5 mins', whatToShow='TRADES', useRTH=True,formatDate=2)
-    df1 = util.df(bars)
-    print(df1)
-    final_data=pd.concat([final_data,df1],axis=0).drop_duplicates()
+final_data=pd.DataFrame()
+for year in range(2016,2023,1):
+
+    for month in range(1,13):
+
+        end_time=last_day_of_month(year, month)
+        print(end_time)
+        bars = ib.reqHistoricalData(
+            contract2, endDateTime=end_time, durationStr='1 M',
+            barSizeSetting='1 hour', whatToShow='TRADES', useRTH=True,formatDate=1)
+        df1 = util.df(bars)
+        print(df1)
+        final_data=pd.concat([final_data,df1],axis=0).drop_duplicates()
     
 print(final_data)
 
-d1={'date':'Date','open':'Open','high':'High','low':'Low','close':'Close','volume':'Volume'}
-final_data.rename(columns =d1, inplace = True) 
-final_data.set_index('Date',inplace=True)
-final_data.to_csv(f'{name}_5min.csv')
+# d1={'date':'Date','open':'Open','high':'High','low':'Low','close':'Close','volume':'Volume'}
+# final_data.rename(columns =d1, inplace = True) 
+# final_data.set_index('Date',inplace=True)
+# final_data.to_csv(f'{name}_1hour.csv')
